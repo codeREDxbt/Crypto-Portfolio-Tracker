@@ -28,7 +28,7 @@ app.get('/api/health', (req, res) => res.json({ ok: true }));
 if (process.env.NODE_ENV === 'production') {
   const distPath = path.join(__dirname, '../../client/dist');
   app.use(express.static(distPath));
-  app.get('/:path*', (req, res) => res.sendFile(path.join(distPath, 'index.html')));
+  app.get(/.*/, (req, res) => res.sendFile(path.join(distPath, 'index.html')));
 }
 
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));

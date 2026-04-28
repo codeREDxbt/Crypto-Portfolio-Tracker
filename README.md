@@ -1,4 +1,4 @@
-# 🌌 Antigravity Crypto Portfolio Tracker
+# 🌌 Crypto Portfolio Tracker
 
 A premium, state-of-the-art cryptocurrency portfolio management system built for the modern investor. Track your holdings, monitor market trends, and set smart alerts with a sleek, high-performance interface.
 
@@ -76,7 +76,7 @@ BETTER_AUTH_URL=http://localhost:3001
 
 | Dashboard | Market |
 | :---: | :---: |
-| ![Dashboard](https://images.unsplash.com/photo-1642104704074-907c0698bcd9?auto=format&fit=crop&q=60&w=400) | ![Market](https://images.unsplash.com/photo-1639762681485-074b7f938ba0?auto=format&fit=crop&q=60&w=400) |
+| ![Dashboard](./Dashboard.png) | ![Market](./Market.png) |
 
 ## 🛡️ License
 

@@ -60,7 +60,7 @@ router.get('/markets', async (req, res) => {
     });
     res.json(data);
   } catch (e) {
-    res.status(500).json({ error: 'Failed to fetch from Binance' });
+    res.status(500).json({ error: 'Failed to fetch from Binance', details: e.message });
   }
 });
 

@@ -44,7 +44,7 @@ router.get('/markets', async (req, res) => {
           id: symbol.toLowerCase(),
           symbol: symbol.toLowerCase(),
           name: symbol,
-          image: `https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/128/color/${symbol.toLowerCase()}.png`,
+          image: `https://assets.coincap.io/assets/icons/${symbol.toLowerCase()}@2x.png`,
           current_price: parseFloat(m.lastPrice),
           market_cap: 0, // Binance doesn't provide market cap
           total_volume: parseFloat(m.quoteVolume),

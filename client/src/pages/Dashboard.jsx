@@ -128,7 +128,12 @@ export default function Dashboard() {
             ) : topMarkets.map(coin => (
               <div key={coin.id} className="flex items-center justify-between group cursor-default">
                 <div className="flex items-center gap-3">
-                  <img src={coin.image} alt={coin.name} className="w-6 h-6 rounded-full" />
+                  <img 
+                    src={coin.image} 
+                    alt={coin.name} 
+                    className="w-6 h-6 rounded-full bg-[#2a2a2f]" 
+                    onError={(e) => e.target.src = `https://ui-avatars.com/api/?name=${coin.symbol}&background=2a2a2f&color=fff`}
+                  />
                   <div>
                     <p className="text-white text-sm font-medium leading-none mb-1">{coin.name}</p>
                     <p className="text-zinc-500 text-xs leading-none">{coin.symbol.toUpperCase()}</p>

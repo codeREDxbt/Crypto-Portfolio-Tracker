@@ -178,7 +178,12 @@ export default function Watchlist() {
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-3">
                         {item.coinImage && (
-                          <img src={item.coinImage} alt={item.coinName} className="w-6 h-6 rounded-full" />
+                          <img 
+                            src={item.coinImage} 
+                            alt={item.coinName} 
+                            className="w-8 h-8 rounded-full bg-[#2a2a2f]" 
+                            onError={(e) => e.target.src = `https://ui-avatars.com/api/?name=${item.coinSymbol}&background=2a2a2f&color=fff`}
+                          />
                         )}
                         <div>
                           <p className="text-white text-sm font-medium">{item.coinName}</p>

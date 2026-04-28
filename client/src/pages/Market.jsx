@@ -293,7 +293,12 @@ export default function Market() {
                   <td className="px-4 py-3 text-zinc-500 text-sm">{index + 1}</td>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-3">
-                      <img src={coin.image} alt={coin.name} className="w-6 h-6 rounded-full" />
+                      <img 
+                        src={coin.image} 
+                        alt={coin.name} 
+                        className="w-6 h-6 rounded-full bg-[#2a2a2f]" 
+                        onError={(e) => e.target.src = `https://ui-avatars.com/api/?name=${coin.symbol}&background=2a2a2f&color=fff`}
+                      />
                       <div>
                         <p className="text-white text-sm font-medium">{coin.name}</p>
                         <p className="text-zinc-500 text-xs">{coin.symbol.toUpperCase()}</p>

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useWatchlist, useRemoveFromWatchlist, useCreateAlert, useDeleteAlert } from '../hooks/useWatchlist.js';
-import { useBatchPrices } from '../hooks/usePrices.js';
+import { useBatchPrices, iconFallback } from '../hooks/usePrices.js';
 import { formatPrice, formatPct, pctClass } from '../lib/format.js';
 import { Bell, TrendingUp, TrendingDown, X, RefreshCw } from 'lucide-react';
 
@@ -182,15 +182,7 @@ export default function Watchlist() {
                             src={item.coinImage} 
                             alt={item.coinName} 
                             className="w-8 h-8 rounded-full bg-[#2a2a2f]" 
-                            onError={(e) => {
-                              if (e.target.src.includes('assets.coincap.io')) {
-                                e.target.src = `https://bin.bnbstatic.com/static/images/market/symbol/${item.coinSymbol.toLowerCase()}.png`;
-                              } else if (e.target.src.includes('bnbstatic.com')) {
-                                e.target.src = `https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/128/color/${item.coinSymbol.toLowerCase()}.png`;
-                              } else {
-                                e.target.src = `https://ui-avatars.com/api/?name=${item.coinSymbol}&background=2a2a2f&color=fff`;
-                              }
-                            }}
+                            onError={iconFallback(item.coinSymbol)}
                           />
                         )}
                         <div>

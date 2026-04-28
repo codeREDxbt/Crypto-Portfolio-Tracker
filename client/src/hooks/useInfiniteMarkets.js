@@ -3,7 +3,7 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 const BINANCE = 'https://api.binance.com/api/v3';
 
 const iconUrl = (symbol) =>
-  `https://assets.coincap.io/assets/icons/${symbol.toLowerCase()}@2x.png`;
+  `https://raw.githubusercontent.com/ErikThiart/cryptocurrency-icons/master/128/${symbol.toLowerCase()}.png`;
 
 export function useInfiniteMarkets() {
   return useInfiniteQuery({

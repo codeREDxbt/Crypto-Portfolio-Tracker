@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { useInfiniteMarkets } from '../hooks/useInfiniteMarkets.js';
-import { useSearchCoins, useCoinChart } from '../hooks/usePrices.js';
+import { useSearchCoins, useCoinChart, iconFallback } from '../hooks/usePrices.js';
 import { useAddToWatchlist } from '../hooks/useWatchlist.js';
 import api from '../lib/api.js';
 import { formatPrice, formatPct, formatMktCap, pctClass } from '../lib/format.js';
@@ -288,15 +288,7 @@ export default function Market() {
                         src={coin.image} 
                         alt={coin.name} 
                         className="w-6 h-6 rounded-full bg-[#2a2a2f]" 
-                        onError={(e) => {
-                          if (e.target.src.includes('assets.coincap.io')) {
-                            e.target.src = `https://bin.bnbstatic.com/static/images/market/symbol/${coin.symbol.toLowerCase()}.png`;
-                          } else if (e.target.src.includes('bnbstatic.com')) {
-                            e.target.src = `https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/128/color/${coin.symbol.toLowerCase()}.png`;
-                          } else {
-                            e.target.src = `https://ui-avatars.com/api/?name=${coin.symbol}&background=2a2a2f&color=fff`;
-                          }
-                        }}
+                        onError={iconFallback(coin.symbol)}
                       />
                       <div>
                         <p className="text-white text-sm font-medium">{coin.name}</p>

@@ -1,5 +1,5 @@
 import { usePortfolio } from '../hooks/usePortfolio.js';
-import { useBatchPrices, useMarkets } from '../hooks/usePrices.js';
+import { useBatchPrices, useMarkets, iconFallback } from '../hooks/usePrices.js';
 import { formatPrice, formatPct, pctClass } from '../lib/format.js';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 import { TrendingUp, TrendingDown, Wallet, PieChart as PieChartIcon, Activity } from 'lucide-react';
@@ -132,15 +132,7 @@ export default function Dashboard() {
                     src={coin.image} 
                     alt={coin.name} 
                     className="w-6 h-6 rounded-full bg-[#2a2a2f]" 
-                    onError={(e) => {
-                      if (e.target.src.includes('assets.coincap.io')) {
-                        e.target.src = `https://bin.bnbstatic.com/static/images/market/symbol/${coin.symbol.toLowerCase()}.png`;
-                      } else if (e.target.src.includes('bnbstatic.com')) {
-                        e.target.src = `https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/128/color/${coin.symbol.toLowerCase()}.png`;
-                      } else {
-                        e.target.src = `https://ui-avatars.com/api/?name=${coin.symbol}&background=2a2a2f&color=fff`;
-                      }
-                    }}
+                    onError={iconFallback(coin.symbol)}
                   />
                   <div>
                     <p className="text-white text-sm font-medium leading-none mb-1">{coin.name}</p>

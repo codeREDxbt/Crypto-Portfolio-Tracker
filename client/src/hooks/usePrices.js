@@ -8,9 +8,18 @@ async function bFetch(url) {
   return r.json();
 }
 
-// Symbol -> CoinGecko-compatible icon
+// Primary: ErikThiart (2000+ coins, very comprehensive)
+// Fallback: CoinCap, then generated avatar
 const iconUrl = (symbol) =>
-  `https://assets.coincap.io/assets/icons/${symbol.toLowerCase()}@2x.png`;
+  `https://raw.githubusercontent.com/ErikThiart/cryptocurrency-icons/master/128/${symbol.toLowerCase()}.png`;
+
+export const iconFallback = (symbol) => (e) => {
+  if (e.target.src.includes('ErikThiart')) {
+    e.target.src = `https://assets.coincap.io/assets/icons/${symbol.toLowerCase()}@2x.png`;
+  } else {
+    e.target.src = `https://ui-avatars.com/api/?name=${symbol}&background=2a2a2f&color=fff&size=64`;
+  }
+};
 
 // Normalize a Binance 24hr ticker to our standard shape
 function normalizeTicker(t) {

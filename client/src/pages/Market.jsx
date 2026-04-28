@@ -220,6 +220,7 @@ export default function Market() {
     return () => observerRef.current?.disconnect();
   }, [handleObserver, coins.length]); // Re-observe when coins change
 
+  async function handleSelectCoin(coin) {
     try {
       const fullCoinData = await api.get(`/api/prices/coin/${coin.id}`);
       setSelectedCoin({ ...coin, ...fullCoinData });

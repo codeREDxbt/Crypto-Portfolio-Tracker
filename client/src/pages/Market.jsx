@@ -31,12 +31,12 @@ function CoinDetailDrawer({ coin, onClose }) {
     : true;
   const strokeColor = isPositive ? '#22c55e' : '#ef4444';
 
-  const priceChange = coin.market_data?.price_change_percentage_24h ?? coin.price_change_percentage_24h ?? 0;
-  const marketCap = coin.market_data?.market_cap?.usd ?? coin.market_cap ?? 0;
-  const volume = coin.market_data?.total_volume?.usd ?? coin.total_volume ?? 0;
-  const ath = coin.market_data?.ath?.usd ?? coin.ath ?? 0;
-  const currentPrice = coin.market_data?.current_price?.usd ?? coin.current_price ?? 0;
-  const circulating = coin.market_data?.circulating_supply ?? coin.circulating_supply ?? 0;
+  const priceChange = coin.price_change_percentage_24h ?? 0;
+  const marketCap = coin.market_cap ?? 0;
+  const volume = coin.total_volume ?? 0;
+  const ath = coin.ath ?? 0;
+  const currentPrice = coin.current_price ?? 0;
+  const circulating = coin.circulating_supply ?? 0;
 
   async function handleAddToWatchlist() {
     try {
@@ -221,23 +221,8 @@ export default function Market() {
   }, [handleObserver, coins.length]); // Re-observe when coins change
 
   async function handleSelectCoin(coin) {
-    try {
-      const fullCoinData = await api.get(`/api/prices/coin/${coin.id}`);
-      setSelectedCoin({ ...coin, ...fullCoinData });
-    } catch (err) {
-      setSelectedCoin({
-        ...coin,
-        market_data: {
-          current_price: { usd: 0 },
-          market_cap: { usd: 0 },
-          total_volume: { usd: 0 },
-          ath: { usd: 0 },
-          circulating_supply: 0,
-          price_change_percentage_24h: 0,
-        },
-        sparkline_in_7d: { price: [] },
-      });
-    }
+    // Data is already available from CoinGecko client-side fetch
+    setSelectedCoin(coin);
   }
 
   const displayCoins = search ? searchResults : coins;

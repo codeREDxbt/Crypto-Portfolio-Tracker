@@ -1,19 +1,45 @@
 import { useQuery } from '@tanstack/react-query';
 
-const CG = 'https://api.coingecko.com/api/v3';
+const BINANCE = 'https://api.binance.com/api/v3';
 
-async function cgFetch(url) {
+async function bFetch(url) {
   const r = await fetch(url);
-  if (!r.ok) throw new Error(`CoinGecko ${r.status}`);
+  if (!r.ok) throw new Error(`Binance ${r.status}`);
   return r.json();
+}
+
+// Symbol -> CoinGecko-compatible icon
+const iconUrl = (symbol) =>
+  `https://assets.coincap.io/assets/icons/${symbol.toLowerCase()}@2x.png`;
+
+// Normalize a Binance 24hr ticker to our standard shape
+function normalizeTicker(t) {
+  const symbol = t.symbol.replace('USDT', '');
+  return {
+    id: symbol.toLowerCase(),          // used as key everywhere
+    symbol: symbol.toLowerCase(),
+    name: symbol,                       // Binance doesn't give full names
+    image: iconUrl(symbol),
+    current_price: parseFloat(t.lastPrice),
+    market_cap: parseFloat(t.quoteVolume), // best proxy available
+    market_cap_rank: null,
+    price_change_percentage_24h: parseFloat(t.priceChangePercent),
+    total_volume: parseFloat(t.volume),
+    sparkline_in_7d: { price: [] },
+  };
 }
 
 export function useMarkets(page = 1) {
   return useQuery({
     queryKey: ['markets', page],
-    queryFn: () => cgFetch(
-      `${CG}/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=25&page=${page}&sparkline=true`
-    ),
+    queryFn: async () => {
+      const all = await bFetch(`${BINANCE}/ticker/24hr`);
+      const usdt = all
+        .filter(t => t.symbol.endsWith('USDT'))
+        .sort((a, b) => parseFloat(b.quoteVolume) - parseFloat(a.quoteVolume));
+      const start = (page - 1) * 25;
+      return usdt.slice(start, start + 25).map(normalizeTicker);
+    },
     staleTime: 60_000,
   });
 }
@@ -22,8 +48,21 @@ export function useSearchCoins(query) {
   return useQuery({
     queryKey: ['search', query],
     queryFn: async () => {
-      const data = await cgFetch(`${CG}/search?query=${encodeURIComponent(query)}`);
-      return data.coins?.slice(0, 10) ?? [];
+      const all = await bFetch(`${BINANCE}/ticker/price`);
+      const q = query.toUpperCase();
+      return all
+        .filter(t => t.symbol.endsWith('USDT') && t.symbol.startsWith(q))
+        .slice(0, 10)
+        .map(t => {
+          const sym = t.symbol.replace('USDT', '');
+          return {
+            id: sym.toLowerCase(),
+            symbol: sym.toLowerCase(),
+            name: sym,
+            thumb: iconUrl(sym),
+            market_cap_rank: null,
+          };
+        });
     },
     enabled: query.length > 1,
     staleTime: 30_000,
@@ -33,9 +72,15 @@ export function useSearchCoins(query) {
 export function useCoinChart(coinId, days = 7) {
   return useQuery({
     queryKey: ['chart', coinId, days],
-    queryFn: () => cgFetch(
-      `${CG}/coins/${coinId}/market_chart?vs_currency=usd&days=${days}`
-    ),
+    queryFn: async () => {
+      const symbol = coinId.toUpperCase() + 'USDT';
+      const interval = days == 1 ? '1h' : '1d';
+      const limit = days == 1 ? 24 : Math.min(parseInt(days), 365);
+      const data = await bFetch(
+        `${BINANCE}/klines?symbol=${symbol}&interval=${interval}&limit=${limit}`
+      );
+      return { prices: data.map(k => [k[0], parseFloat(k[4])]) };
+    },
     enabled: !!coinId,
     staleTime: 60_000,
   });
@@ -45,17 +90,19 @@ export function useBatchPrices(ids) {
   return useQuery({
     queryKey: ['batch', ids],
     queryFn: async () => {
-      const data = await cgFetch(
-        `${CG}/simple/price?ids=${ids}&vs_currencies=usd&include_24hr_change=true`
+      const idList = ids.split(',').map(id => `"${id.toUpperCase()}USDT"`);
+      const data = await bFetch(
+        `${BINANCE}/ticker/24hr?symbols=[${idList.join(',')}]`
       );
-      // Normalize to { id: { current_price, price_change_percentage_24h } }
       const result = {};
-      for (const [id, val] of Object.entries(data)) {
-        result[id] = {
-          current_price: val.usd,
-          price_change_percentage_24h: val.usd_24h_change,
+      const items = Array.isArray(data) ? data : [data];
+      items.forEach(t => {
+        const key = t.symbol.replace('USDT', '').toLowerCase();
+        result[key] = {
+          current_price: parseFloat(t.lastPrice),
+          price_change_percentage_24h: parseFloat(t.priceChangePercent),
         };
-      }
+      });
       return result;
     },
     enabled: !!ids && ids.length > 0,

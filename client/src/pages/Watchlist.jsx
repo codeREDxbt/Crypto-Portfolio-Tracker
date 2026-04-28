@@ -182,7 +182,13 @@ export default function Watchlist() {
                             src={item.coinImage} 
                             alt={item.coinName} 
                             className="w-8 h-8 rounded-full bg-[#2a2a2f]" 
-                            onError={(e) => e.target.src = `https://ui-avatars.com/api/?name=${item.coinSymbol}&background=2a2a2f&color=fff`}
+                            onError={(e) => {
+                              if (e.target.src.includes('raw.githubusercontent.com')) {
+                                e.target.src = `https://bin.bnbstatic.com/static/images/market/symbol/${item.coinSymbol.toLowerCase()}.png`;
+                              } else {
+                                e.target.src = `https://ui-avatars.com/api/?name=${item.coinSymbol}&background=2a2a2f&color=fff`;
+                              }
+                            }}
                           />
                         )}
                         <div>

@@ -110,7 +110,7 @@ function CoinDetailDrawer({ coin, onClose }) {
           <div className="h-48 skeleton" />
         ) : chartError || chartData?.error ? (
           <div className="h-48 flex items-center justify-center text-red-400 text-sm bg-red-400/5 rounded-lg border border-red-400/10 px-4 text-center">
-            {chartData?.error || 'Failed to load chart data. CoinGecko rate limit may have been reached.'}
+            {chartData?.error || 'Failed to load chart data. Binance rate limit may have been reached.'}
           </div>
         ) : formattedData.length > 0 ? (
           <div className="h-48">
@@ -207,12 +207,18 @@ export default function Market() {
   useEffect(() => {
     const element = loadMoreRef.current;
     if (!element) return;
+    
+    // Disconnect previous observer if any
+    if (observerRef.current) observerRef.current.disconnect();
 
-    observerRef.current = new IntersectionObserver(handleObserver, { threshold: 0.1 });
+    observerRef.current = new IntersectionObserver(handleObserver, { 
+      threshold: 0.1,
+      rootMargin: '100px' // Start loading before it hits the viewport
+    });
     observerRef.current.observe(element);
 
     return () => observerRef.current?.disconnect();
-  }, [handleObserver]);
+  }, [handleObserver, coins.length]); // Re-observe when coins change
 
   async function handleSelectCoin(coin) {
     try {
@@ -297,7 +303,13 @@ export default function Market() {
                         src={coin.image} 
                         alt={coin.name} 
                         className="w-6 h-6 rounded-full bg-[#2a2a2f]" 
-                        onError={(e) => e.target.src = `https://ui-avatars.com/api/?name=${coin.symbol}&background=2a2a2f&color=fff`}
+                        onError={(e) => {
+                          if (e.target.src.includes('raw.githubusercontent.com')) {
+                            e.target.src = `https://bin.bnbstatic.com/static/images/market/symbol/${coin.symbol.toLowerCase()}.png`;
+                          } else {
+                            e.target.src = `https://ui-avatars.com/api/?name=${coin.symbol}&background=2a2a2f&color=fff`;
+                          }
+                        }}
                       />
                       <div>
                         <p className="text-white text-sm font-medium">{coin.name}</p>

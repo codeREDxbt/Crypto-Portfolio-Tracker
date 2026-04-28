@@ -21,8 +21,8 @@ async function cached(key, ttlMs, fetchFn) {
   }
 }
 
-// Helper to get Binance Icon URL
-const getIconUrl = (symbol) => `https://bin.bnbstatic.com/static/images/market/symbol/${symbol.toLowerCase()}.png`;
+// Helper to get Coin Icon URL (using a high-quality community icon pack)
+const getIconUrl = (symbol) => `https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/128/color/${symbol.toLowerCase()}.png`;
 
 router.get('/markets', async (req, res) => {
   const page = req.query.page || 1;

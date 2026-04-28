@@ -132,7 +132,13 @@ export default function Dashboard() {
                     src={coin.image} 
                     alt={coin.name} 
                     className="w-6 h-6 rounded-full bg-[#2a2a2f]" 
-                    onError={(e) => e.target.src = `https://ui-avatars.com/api/?name=${coin.symbol}&background=2a2a2f&color=fff`}
+                    onError={(e) => {
+                      if (e.target.src.includes('raw.githubusercontent.com')) {
+                        e.target.src = `https://bin.bnbstatic.com/static/images/market/symbol/${coin.symbol.toLowerCase()}.png`;
+                      } else {
+                        e.target.src = `https://ui-avatars.com/api/?name=${coin.symbol}&background=2a2a2f&color=fff`;
+                      }
+                    }}
                   />
                   <div>
                     <p className="text-white text-sm font-medium leading-none mb-1">{coin.name}</p>

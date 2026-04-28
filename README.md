@@ -7,26 +7,26 @@ A premium, state-of-the-art cryptocurrency portfolio management system built for
 ## ✨ Features
 
 - **📊 Real-time Dashboard**: Unified view of your portfolio's total value, P&L, and asset allocation.
-- **📈 Advanced Market Insights**: Interactive sparklines and detailed price charts powered by CoinGecko.
-- **⭐ Smart Watchlist**: Keep an eye on your favorite assets with real-time price updates and 24h change indicators.
-- **🔔 Price Alerts**: Never miss a move. Set "Above" or "Below" target price alerts for any coin.
+- **📈 Advanced Market Insights**: Real-time charts and ticker data powered by **Binance**.
+- **⭐ Smart Watchlist**: Keep an eye on your favorite assets with ultra-low latency price updates.
+- **🔔 Price Alerts**: Never miss a move. Set "Above" or "Below" target price alerts for any Binance-listed coin.
+- **🔑 Keyless Architecture**: No API keys required for market data.
 - **💼 Portfolio Management**: Seamlessly add, update, and track holdings with average buy price and quantity metrics.
 - **🌗 Premium UI/UX**: Dark-mode first design with glassmorphism, smooth transitions, and responsive layouts.
 
 ## 🛠️ Tech Stack
 
 ### Frontend
-- **React 18** + **Vite** (Ultra-fast development & bundling)
-- **TailwindCSS** (Custom premium styling)
-- **TanStack Query (v5)** (High-performance data fetching & caching)
-- **Recharts** (Professional-grade visualization)
-- **Lucide React** (Beautifully consistent iconography)
+- **React 18** + **Vite**
+- **TailwindCSS**
+- **TanStack Query (v5)**
+- **Recharts**
+- **Lucide React**
 
 ### Backend
 - **Node.js** + **Express 5**
-- **Drizzle ORM** (Type-safe SQL interactions)
-- **SQLite** (Lightweight, high-performance database)
-- **Better-Auth** (Secure authentication framework)
+- **Binance API** (Primary data source)
+- **Drizzle ORM** + **SQLite**
 
 ## 🚀 Getting Started
 
@@ -46,7 +46,7 @@ A premium, state-of-the-art cryptocurrency portfolio management system built for
    ```bash
    cd server
    npm install
-   cp .env.example .env # Add your CoinGecko API Key
+   cp .env.example .env 
    npm run db:push     # Initialize the database
    npm run dev         # Start server on http://localhost:3001
    ```

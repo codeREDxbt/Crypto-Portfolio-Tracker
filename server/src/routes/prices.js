@@ -16,10 +16,14 @@ async function cached(key, ttlMs, fetchFn) {
     }
     return data;
   } catch (e) {
-    console.error(`Fetch failed for ${key}:`, e);
+    console.error(`Fetch failed for ${key}:`, e.message);
     throw e;
   }
 }
+
+const fetchWithHeaders = (url) => fetch(url, {
+  headers: { 'User-Agent': 'CryptoPortfolioTracker/1.0' }
+});
 
 // Helper to get Coin Icon URL (using a premium, high-resolution icon pack)
 const getIconUrl = (symbol) => `https://assets.coincap.io/assets/icons/${symbol.toLowerCase()}@2x.png`;
@@ -29,7 +33,7 @@ router.get('/markets', async (req, res) => {
   const key = `markets_binance_p${page}`;
   try {
     const data = await cached(key, 60_000, async () => {
-      const r = await fetch(`${BINANCE_BASE}/ticker/24hr`);
+      const r = await fetchWithHeaders(`${BINANCE_BASE}/ticker/24hr`);
       if (!r.ok) throw new Error(`Binance status: ${r.status}`);
       const json = await r.json();
       
@@ -65,7 +69,7 @@ router.get('/search', async (req, res) => {
   if (!q) return res.json([]);
   try {
     const data = await cached(`search_${q}`, 60_000, async () => {
-      const r = await fetch(`${BINANCE_BASE}/ticker/price`);
+      const r = await fetchWithHeaders(`${BINANCE_BASE}/ticker/price`);
       const json = await r.json();
       return json
         .filter(t => t.symbol.includes(q) && t.symbol.endsWith('USDT'))
@@ -94,7 +98,7 @@ router.get('/chart/:id', async (req, res) => {
       const interval = days == 1 ? '1h' : '1d';
       const limit = days == 1 ? 24 : days;
       const symbol = id.toUpperCase() + 'USDT';
-      const r = await fetch(`${BINANCE_BASE}/klines?symbol=${symbol}&interval=${interval}&limit=${limit}`);
+      const r = await fetchWithHeaders(`${BINANCE_BASE}/klines?symbol=${symbol}&interval=${interval}&limit=${limit}`);
       const json = await r.json();
       return { prices: json.map(k => [k[0], parseFloat(k[4])]) };
     });
@@ -109,7 +113,7 @@ router.get('/coin/:id', async (req, res) => {
   try {
     const data = await cached(`coin_${id}`, 60_000, async () => {
       const symbol = id.toUpperCase() + 'USDT';
-      const r = await fetch(`${BINANCE_BASE}/ticker/24hr?symbol=${symbol}`);
+      const r = await fetchWithHeaders(`${BINANCE_BASE}/ticker/24hr?symbol=${symbol}`);
       const json = await r.json();
       return {
         current_price: parseFloat(json.lastPrice),
@@ -132,7 +136,7 @@ router.get('/batch', async (req, res) => {
   try {
     const data = await cached(`batch_${symbols}`, 60_000, async () => {
       const symbolList = symbols.toUpperCase().split(',').map(s => `"${s}USDT"`);
-      const r = await fetch(`${BINANCE_BASE}/ticker/24hr?symbols=[${symbolList.join(',')}]`);
+      const r = await fetchWithHeaders(`${BINANCE_BASE}/ticker/24hr?symbols=[${symbolList.join(',')}]`);
       const json = await r.json();
       const prices = {};
       const items = Array.isArray(json) ? json : [json];

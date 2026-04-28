@@ -304,8 +304,10 @@ export default function Market() {
                         alt={coin.name} 
                         className="w-6 h-6 rounded-full bg-[#2a2a2f]" 
                         onError={(e) => {
-                          if (e.target.src.includes('raw.githubusercontent.com')) {
+                          if (e.target.src.includes('assets.coincap.io')) {
                             e.target.src = `https://bin.bnbstatic.com/static/images/market/symbol/${coin.symbol.toLowerCase()}.png`;
+                          } else if (e.target.src.includes('bnbstatic.com')) {
+                            e.target.src = `https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/128/color/${coin.symbol.toLowerCase()}.png`;
                           } else {
                             e.target.src = `https://ui-avatars.com/api/?name=${coin.symbol}&background=2a2a2f&color=fff`;
                           }

@@ -21,8 +21,8 @@ async function cached(key, ttlMs, fetchFn) {
   }
 }
 
-// Helper to get Coin Icon URL (using a high-quality community icon pack)
-const getIconUrl = (symbol) => `https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/128/color/${symbol.toLowerCase()}.png`;
+// Helper to get Coin Icon URL (using a premium, high-resolution icon pack)
+const getIconUrl = (symbol) => `https://assets.coincap.io/assets/icons/${symbol.toLowerCase()}@2x.png`;
 
 router.get('/markets', async (req, res) => {
   const page = req.query.page || 1;

@@ -7,10 +7,11 @@ A premium, state-of-the-art cryptocurrency portfolio management system built for
 ## ✨ Features
 
 - **📊 Real-time Dashboard**: Unified view of your portfolio's total value, P&L, and asset allocation.
-- **📈 Advanced Market Insights**: Real-time charts and ticker data powered by **Binance**.
-- **⭐ Smart Watchlist**: Keep an eye on your favorite assets with ultra-low latency price updates.
-- **🔔 Price Alerts**: Never miss a move. Set "Above" or "Below" target price alerts for any Binance-listed coin.
-- **🔑 Keyless Architecture**: No API keys required for market data.
+- **📈 Binance-Powered Insights**: Lightning-fast charts and market data directly from the **Binance API**.
+- **💎 Premium Iconography**: A refined, multi-stage icon system utilizing **CoinCap** and **Binance** asset libraries.
+- **🚀 Seamless Exploration**: Infinite scroll enabled Market tab for effortless browsing of thousands of pairs.
+- **⭐ Smart Watchlist**: Track your favorite assets with ultra-low latency price updates.
+- **🔑 Keyless & Open**: No API keys required for market data.
 - **💼 Portfolio Management**: Seamlessly add, update, and track holdings with average buy price and quantity metrics.
 - **🌗 Premium UI/UX**: Dark-mode first design with glassmorphism, smooth transitions, and responsive layouts.
 
@@ -18,14 +19,13 @@ A premium, state-of-the-art cryptocurrency portfolio management system built for
 
 ### Frontend
 - **React 18** + **Vite**
-- **TailwindCSS**
-- **TanStack Query (v5)**
-- **Recharts**
-- **Lucide React**
+- **TailwindCSS** (Custom premium styling)
+- **TanStack Query (v5)** (Infinite scroll & data management)
+- **Recharts** (Professional-grade visualization)
 
 ### Backend
 - **Node.js** + **Express 5**
-- **Binance API** (Primary data source)
+- **Binance API** (Core price engine)
 - **Drizzle ORM** + **SQLite**
 
 ## 🚀 Getting Started

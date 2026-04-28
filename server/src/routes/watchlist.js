@@ -13,17 +13,18 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
   const { coinId, coinSymbol, coinName, coinImage } = req.body;
 
-  const existing = await db.select().from(watchlistItems)
-    .where(eq(watchlistItems.coinId, coinId)).get();
+  const rows = await db.select().from(watchlistItems)
+    .where(eq(watchlistItems.coinId, coinId));
+  const existing = rows[0];
 
   if (existing) {
     return res.json(existing);
   }
 
-  const item = await db.insert(watchlistItems).values({
+  const insertedRows = await db.insert(watchlistItems).values({
     coinId, coinSymbol, coinName, coinImage,
-  }).returning().get();
-  res.status(201).json(item);
+  }).returning();
+  res.status(201).json(insertedRows[0]);
 });
 
 router.delete('/:id', async (req, res) => {
@@ -45,10 +46,10 @@ router.get('/alerts', async (req, res) => {
 
 router.post('/alerts', async (req, res) => {
   const { coinId, coinSymbol, targetPrice, condition } = req.body;
-  const alert = await db.insert(priceAlerts).values({
+  const insertedRows = await db.insert(priceAlerts).values({
     coinId, coinSymbol, targetPrice, condition,
-  }).returning().get();
-  res.status(201).json(alert);
+  }).returning();
+  res.status(201).json(insertedRows[0]);
 });
 
 router.delete('/alerts/:id', async (req, res) => {

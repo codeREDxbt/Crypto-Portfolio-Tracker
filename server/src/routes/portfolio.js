@@ -13,34 +13,35 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
   const { coinId, coinSymbol, coinName, coinImage, quantity, avgBuyPrice, notes } = req.body;
 
-  const existing = await db.select().from(portfolioHoldings)
-    .where(eq(portfolioHoldings.coinId, coinId)).get();
+  const rows = await db.select().from(portfolioHoldings)
+    .where(eq(portfolioHoldings.coinId, coinId));
+  const existing = rows[0];
 
   if (existing) {
     const totalQty = existing.quantity + quantity;
     const newAvg = ((existing.avgBuyPrice * existing.quantity) + (avgBuyPrice * quantity)) / totalQty;
-    const updated = await db.update(portfolioHoldings)
+    const updatedRows = await db.update(portfolioHoldings)
       .set({ quantity: totalQty, avgBuyPrice: newAvg })
       .where(eq(portfolioHoldings.id, existing.id))
-      .returning().get();
-    return res.json(updated);
+      .returning();
+    return res.json(updatedRows[0]);
   }
 
-  const holding = await db.insert(portfolioHoldings).values({
+  const insertedRows = await db.insert(portfolioHoldings).values({
     coinId, coinSymbol, coinName, coinImage,
     quantity, avgBuyPrice, notes,
-  }).returning().get();
-  res.status(201).json(holding);
+  }).returning();
+  res.status(201).json(insertedRows[0]);
 });
 
 router.patch('/:id', async (req, res) => {
   const { quantity, avgBuyPrice, notes } = req.body;
-  const updated = await db.update(portfolioHoldings)
+  const updatedRows = await db.update(portfolioHoldings)
     .set({ quantity, avgBuyPrice, notes })
     .where(eq(portfolioHoldings.id, req.params.id))
-    .returning().get();
-  if (!updated) return res.status(404).json({ error: 'Not found' });
-  res.json(updated);
+    .returning();
+  if (!updatedRows[0]) return res.status(404).json({ error: 'Not found' });
+  res.json(updatedRows[0]);
 });
 
 router.delete('/:id', async (req, res) => {

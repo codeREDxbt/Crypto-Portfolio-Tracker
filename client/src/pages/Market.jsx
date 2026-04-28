@@ -216,8 +216,7 @@ export default function Market() {
 
   async function handleSelectCoin(coin) {
     try {
-      const symbol = coin.symbol || coin.id;
-      const fullCoinData = await api.get(`/api/prices/coin/${symbol}`);
+      const fullCoinData = await api.get(`/api/prices/coin/${coin.symbol}`);
       setSelectedCoin({ ...coin, ...fullCoinData });
     } catch (err) {
       setSelectedCoin({

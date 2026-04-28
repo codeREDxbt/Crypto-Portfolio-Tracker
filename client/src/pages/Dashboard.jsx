@@ -9,7 +9,7 @@ const COLORS = ['#3b82f6', '#22c55e', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'
 export default function Dashboard() {
   const { data: holdings = [], isLoading } = usePortfolio();
 
-  const coinIds = holdings.map(h => h.coinId).join(',');
+  const coinIds = holdings.map(h => h.coinSymbol).join(',');
   const { data: prices = {} } = useBatchPrices(coinIds);
   const { data: markets = [], isLoading: marketsLoading } = useMarkets(1);
   const topMarkets = markets.slice(0, 5);
@@ -28,7 +28,7 @@ export default function Dashboard() {
   let totalValue = 0;
   let totalCost = 0;
   const chartData = holdings.map((h, i) => {
-    const priceData = prices[h.coinId];
+    const priceData = prices[h.coinSymbol.toLowerCase()];
     const currentPrice = priceData?.usd || 0;
     const value = h.quantity * currentPrice;
     const cost = h.quantity * h.avgBuyPrice;

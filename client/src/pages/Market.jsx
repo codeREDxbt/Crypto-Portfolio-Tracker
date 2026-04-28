@@ -18,7 +18,7 @@ const PERIODS = [
 function CoinDetailDrawer({ coin, onClose }) {
   const [days, setDays] = useState(7);
   const [added, setAdded] = useState(false);
-  const { data: chartData, isLoading: chartLoading, isError: chartError } = useCoinChart(coin.id, days);
+  const { data: chartData, isLoading: chartLoading, isError: chartError } = useCoinChart(coin.symbol, days);
   const addToWatchlist = useAddToWatchlist();
 
   const formattedData = chartData?.prices?.map(([timestamp, price]) => ({
@@ -216,8 +216,9 @@ export default function Market() {
 
   async function handleSelectCoin(coin) {
     try {
-      const fullCoinData = await api.get(`/api/prices/coin/${coin.id}`);
-      setSelectedCoin(fullCoinData);
+      const symbol = coin.symbol || coin.id;
+      const fullCoinData = await api.get(`/api/prices/coin/${symbol}`);
+      setSelectedCoin({ ...coin, ...fullCoinData });
     } catch (err) {
       setSelectedCoin({
         ...coin,

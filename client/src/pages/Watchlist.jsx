@@ -117,7 +117,7 @@ export default function Watchlist() {
 
   const items = Array.isArray(data) ? data : [];
 
-  const coinIds = items.map(i => i.coinId).filter(Boolean).join(',');
+  const coinIds = items.map(i => i.coinSymbol).filter(Boolean).join(',');
   const { data: prices } = useBatchPrices(coinIds);
 
   const [alertCoin, setAlertCoin] = useState(null);
@@ -171,7 +171,7 @@ export default function Watchlist() {
             </thead>
             <tbody>
               {items.map(item => {
-                const priceData = prices?.[item.coinId];
+                const priceData = prices?.[item.coinSymbol.toLowerCase()];
                 const hasError = !!prices?.error;
                 return (
                   <tr key={item.id || item.coinId} className="border-b border-[#2a2a2f] last:border-0 hover:bg-[#18181b]">

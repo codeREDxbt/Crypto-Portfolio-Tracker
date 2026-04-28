@@ -117,7 +117,7 @@ export default function Watchlist() {
 
   const items = Array.isArray(data) ? data : [];
 
-  const coinIds = items.map(i => i.coinSymbol).filter(Boolean).join(',');
+  const coinIds = items.map(i => i.coinId).filter(Boolean).join(',');
   const { data: prices } = useBatchPrices(coinIds);
 
   const [alertCoin, setAlertCoin] = useState(null);
@@ -171,7 +171,7 @@ export default function Watchlist() {
             </thead>
             <tbody>
               {items.map(item => {
-                const priceData = prices?.[item.coinSymbol.toLowerCase()];
+                const priceData = prices?.[item.coinId.toLowerCase()];
                 const hasError = !!prices?.error;
                 return (
                   <tr key={item.id || item.coinId} className="border-b border-[#2a2a2f] last:border-0 hover:bg-[#18181b]">
@@ -200,10 +200,10 @@ export default function Watchlist() {
                       </div>
                     </td>
                     <td className="text-right text-white text-sm font-mono px-4 py-3">
-                      {priceData ? formatPrice(priceData.usd) : hasError ? <span className="text-red-400/50 text-[10px]">Error</span> : '-'}
+                      {priceData ? formatPrice(priceData.current_price) : hasError ? <span className="text-red-400/50 text-[10px]">Error</span> : '-'}
                     </td>
-                    <td className={`text-right text-sm font-mono px-4 py-3 ${priceData ? pctClass(priceData.usd_24h_change) : ''}`}>
-                      {priceData ? formatPct(priceData.usd_24h_change) : '-'}
+                    <td className={`text-right text-sm font-mono px-4 py-3 ${priceData ? pctClass(priceData.price_change_percentage_24h) : ''}`}>
+                      {priceData ? formatPct(priceData.price_change_percentage_24h) : '-'}
                     </td>
                     <td className="text-right px-4 py-3">
                       <button

@@ -18,7 +18,7 @@ const PERIODS = [
 function CoinDetailDrawer({ coin, onClose }) {
   const [days, setDays] = useState(7);
   const [added, setAdded] = useState(false);
-  const { data: chartData, isLoading: chartLoading, isError: chartError } = useCoinChart(coin.symbol, days);
+  const { data: chartData, isLoading: chartLoading, isError: chartError } = useCoinChart(coin.id, days);
   const addToWatchlist = useAddToWatchlist();
 
   const formattedData = chartData?.prices?.map(([timestamp, price]) => ({
@@ -110,7 +110,7 @@ function CoinDetailDrawer({ coin, onClose }) {
           <div className="h-48 skeleton" />
         ) : chartError || chartData?.error ? (
           <div className="h-48 flex items-center justify-center text-red-400 text-sm bg-red-400/5 rounded-lg border border-red-400/10 px-4 text-center">
-            {chartData?.error || 'Failed to load chart data. Binance rate limit may have been reached.'}
+            {chartData?.error || 'Failed to load chart data. Data provider may be temporarily unavailable.'}
           </div>
         ) : formattedData.length > 0 ? (
           <div className="h-48">
@@ -220,9 +220,8 @@ export default function Market() {
     return () => observerRef.current?.disconnect();
   }, [handleObserver, coins.length]); // Re-observe when coins change
 
-  async function handleSelectCoin(coin) {
     try {
-      const fullCoinData = await api.get(`/api/prices/coin/${coin.symbol}`);
+      const fullCoinData = await api.get(`/api/prices/coin/${coin.id}`);
       setSelectedCoin({ ...coin, ...fullCoinData });
     } catch (err) {
       setSelectedCoin({

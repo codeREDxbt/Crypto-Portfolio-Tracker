@@ -54,7 +54,7 @@ function CoinDetailDrawer({ coin, onClose }) {
   }
 
   return (
-    <div className="fixed inset-y-0 right-0 w-96 bg-[#111113] border-l border-[#2a2a2f] z-50 flex flex-col shadow-2xl">
+    <div className="fixed inset-y-0 right-0 w-full sm:w-96 bg-[#111113] border-l border-[#2a2a2f] z-[60] flex flex-col shadow-2xl transition-transform duration-300">
       <div className="flex items-center justify-between p-4 border-b border-[#2a2a2f]">
         <div className="flex items-center gap-3">
           <img src={coin.image?.large || coin.image || coin.thumb} alt={coin.name} className="w-8 h-8 rounded-full" />
@@ -263,7 +263,8 @@ export default function Market() {
 
       {!search && (
         <div className="bg-[#111113] border border-[#2a2a2f] rounded-xl overflow-hidden">
-          <table className="w-full">
+          <div className="overflow-x-auto custom-scrollbar">
+            <table className="w-full min-w-[600px] md:min-w-0">
             <thead>
               <tr className="border-b border-[#2a2a2f]">
                 <th className="text-left text-zinc-500 text-xs uppercase tracking-wider px-4 py-3">#</th>
@@ -306,8 +307,8 @@ export default function Market() {
                   </td>
                 </tr>
               ))}
-            </tbody>
-          </table>
+            </table>
+          </div>
 
           <div ref={loadMoreRef} className="p-4 text-center">
             {isFetchingNextPage && <div className="text-zinc-500 text-sm">Loading more...</div>}

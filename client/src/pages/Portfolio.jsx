@@ -37,7 +37,7 @@ function AddCoinModal({ onClose, onAdd }) {
 
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-      <div className="bg-[#111113] border border-[#2a2a2f] rounded-xl p-6 w-full max-w-md">
+      <div className="bg-[#111113] border border-[#2a2a2f] rounded-xl p-4 sm:p-6 w-full max-w-md mx-4">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-white text-lg font-semibold">Add to Portfolio</h2>
           <button onClick={onClose} className="text-zinc-400 hover:text-white">
@@ -170,7 +170,8 @@ export default function Portfolio() {
         </div>
       ) : (
         <div className="bg-[#111113] border border-[#2a2a2f] rounded-xl overflow-hidden">
-          <table className="w-full">
+          <div className="overflow-x-auto custom-scrollbar">
+            <table className="w-full min-w-[600px] md:min-w-0">
             <thead>
               <tr className="border-b border-[#2a2a2f]">
                 <th className="text-left text-zinc-500 text-xs uppercase tracking-wider px-4 py-3">Coin</th>
@@ -211,6 +212,7 @@ export default function Portfolio() {
               ))}
             </tbody>
           </table>
+        </div>
         </div>
       )}
 

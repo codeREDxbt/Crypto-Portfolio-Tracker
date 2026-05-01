@@ -265,48 +265,49 @@ export default function Market() {
         <div className="bg-[#111113] border border-[#2a2a2f] rounded-xl overflow-hidden">
           <div className="overflow-x-auto custom-scrollbar">
             <table className="w-full min-w-[600px] md:min-w-0">
-            <thead>
-              <tr className="border-b border-[#2a2a2f]">
-                <th className="text-left text-zinc-500 text-xs uppercase tracking-wider px-4 py-3">#</th>
-                <th className="text-left text-zinc-500 text-xs uppercase tracking-wider px-4 py-3">Coin</th>
-                <th className="text-right text-zinc-500 text-xs uppercase tracking-wider px-4 py-3">Price</th>
-                <th className="text-right text-zinc-500 text-xs uppercase tracking-wider px-4 py-3">24h</th>
-                <th className="text-right text-zinc-500 text-xs uppercase tracking-wider px-4 py-3">Market Cap</th>
-                <th className="text-right text-zinc-500 text-xs uppercase tracking-wider px-4 py-3">7d Chart</th>
-              </tr>
-            </thead>
-            <tbody>
-              {coins.map((coin, index) => (
-                <tr
-                  key={coin.id}
-                  className="border-b border-[#2a2a2f] last:border-0 hover:bg-[#18181b] cursor-pointer"
-                  onClick={() => setSelectedCoin(coin)}
-                >
-                  <td className="px-4 py-3 text-zinc-500 text-sm">{index + 1}</td>
-                  <td className="px-4 py-3">
-                    <div className="flex items-center gap-3">
-                      <img 
-                        src={coin.image} 
-                        alt={coin.name} 
-                        className="w-6 h-6 rounded-full bg-[#2a2a2f]" 
-                        onError={iconFallback(coin.symbol)}
-                      />
-                      <div>
-                        <p className="text-white text-sm font-medium">{coin.name}</p>
-                        <p className="text-zinc-500 text-xs">{coin.symbol.toUpperCase()}</p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="text-right text-white text-sm font-mono px-4 py-3">{formatPrice(coin.current_price)}</td>
-                  <td className={`text-right text-sm font-mono px-4 py-3 ${pctClass(coin.price_change_percentage_24h)}`}>
-                    {formatPct(coin.price_change_percentage_24h)}
-                  </td>
-                  <td className="text-right text-white text-sm font-mono px-4 py-3">{formatMktCap(coin.market_cap)}</td>
-                  <td className="px-4 py-3">
-                    <MiniSparkline coin={coin} />
-                  </td>
+              <thead>
+                <tr className="border-b border-[#2a2a2f]">
+                  <th className="text-left text-zinc-500 text-xs uppercase tracking-wider px-4 py-3">#</th>
+                  <th className="text-left text-zinc-500 text-xs uppercase tracking-wider px-4 py-3">Coin</th>
+                  <th className="text-right text-zinc-500 text-xs uppercase tracking-wider px-4 py-3">Price</th>
+                  <th className="text-right text-zinc-500 text-xs uppercase tracking-wider px-4 py-3">24h</th>
+                  <th className="text-right text-zinc-500 text-xs uppercase tracking-wider px-4 py-3">Market Cap</th>
+                  <th className="text-right text-zinc-500 text-xs uppercase tracking-wider px-4 py-3">7d Chart</th>
                 </tr>
-              ))}
+              </thead>
+              <tbody>
+                {coins.map((coin, index) => (
+                  <tr
+                    key={coin.id}
+                    className="border-b border-[#2a2a2f] last:border-0 hover:bg-[#18181b] cursor-pointer"
+                    onClick={() => setSelectedCoin(coin)}
+                  >
+                    <td className="px-4 py-3 text-zinc-500 text-sm">{index + 1}</td>
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-3">
+                        <img 
+                          src={coin.image} 
+                          alt={coin.name} 
+                          className="w-6 h-6 rounded-full bg-[#2a2a2f]" 
+                          onError={iconFallback(coin.symbol)}
+                        />
+                        <div>
+                          <p className="text-white text-sm font-medium">{coin.name}</p>
+                          <p className="text-zinc-500 text-xs">{coin.symbol.toUpperCase()}</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="text-right text-white text-sm font-mono px-4 py-3">{formatPrice(coin.current_price)}</td>
+                    <td className={`text-right text-sm font-mono px-4 py-3 ${pctClass(coin.price_change_percentage_24h)}`}>
+                      {formatPct(coin.price_change_percentage_24h)}
+                    </td>
+                    <td className="text-right text-white text-sm font-mono px-4 py-3">{formatMktCap(coin.market_cap)}</td>
+                    <td className="px-4 py-3">
+                      <MiniSparkline coin={coin} />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
             </table>
           </div>
 
